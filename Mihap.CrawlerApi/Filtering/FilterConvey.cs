@@ -21,5 +21,14 @@ namespace Mihap.CrawlerApi.Filtering
 			}
 			return true;
 		}
+
+		public IEnumerable<Link> PassLinkArray(IEnumerable<Link> links)
+		{
+			foreach(var link in links)
+			{
+				if (PassLink(link))
+					yield return link;
+			}
+		}
 	}
 }
