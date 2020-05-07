@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace Mihap.CrawlerApi.Processing
 {
 	public delegate void OnAllWorkersFinishedDelegate();
+	public delegate void OnLinkParsedFinishedDelegate();
 	public class ProcessingManager
 	{
 		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
@@ -53,7 +54,6 @@ namespace Mihap.CrawlerApi.Processing
 		public void StopProcessing()
 		{
 			Processors.ForEach(x => x.DoProcessing = false);
-			throw new NotImplementedException();
 		}
 	}
 }

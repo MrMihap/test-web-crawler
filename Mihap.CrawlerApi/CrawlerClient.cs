@@ -1,4 +1,5 @@
 ﻿using Mihap.CrawlerApi.Processing;
+using Mihap.CrawlerApi.Queue;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ namespace Mihap.CrawlerApi
 		public static event OnCrawlingFinishedDelegate OnCrawlingFinished;
 
 		private CrawlerClientSettings settings;
+
 		private  TaskData RootLinkTask;
+
 		ProcessingManager processingManager;
 
 
@@ -29,17 +32,21 @@ namespace Mihap.CrawlerApi
 
 				options.Invoke(settings);
 
-				//await Instance.Run( WorkersCount);
+				Instance.settings = settings;
+
+				QueueManager.Init(settings.MaxDepth);
+				
+				await Instance.Run();
 			}
 			finally
 			{
 				Monitor.Exit(BlockingObject);
 			}
 		}
-		private async Task Run(int WorkersCount)
+		private async Task Run()
 		{
 			await Task.CompletedTask.ConfigureAwait(false);
-			processingManager = ProcessingManager.InitNewManager(WorkersCount);
+			processingManager = ProcessingManager.InitNewManager(settings.WorkersN);
 			processingManager.OnAllWorkersFinished += ProcessingManager_OnAllWorkersFinished;
 			processingManager.StartProcessing();
 		}
