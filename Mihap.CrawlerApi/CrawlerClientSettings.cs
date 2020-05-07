@@ -20,7 +20,7 @@ namespace Mihap.CrawlerApi
 
 		public CrawlerClientSettings AddExporter(BaseExporter exporter)
 		{
-			exporters.Add(exporter)
+			exporters.Add(exporter);
 			return this;
 		}
 	}
