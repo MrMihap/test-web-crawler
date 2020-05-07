@@ -6,7 +6,7 @@ namespace Mihap.CrawlerApi.Processing
 {
 	public class ProcessingManager
 	{
-		private List<Processor> Processors = new List<Processor>();
+		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
 		private bool DoProcessing = false;
 
 		public static ProcessingManager InitNewManager(int WorkersN)
@@ -16,7 +16,7 @@ namespace Mihap.CrawlerApi.Processing
 			var manager = new ProcessingManager();
 			for(int i =0; i< WorkersN; i++)
 			{
-				manager.Processors.Add(new Processor());
+				manager.Processors.Add(new ProcessingWorker());
 			}
 
 			return manager;

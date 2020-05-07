@@ -1,4 +1,5 @@
 ﻿using Mihap.CrawlerApi.Models;
+using Mihap.CrawlerApi.Processing;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,23 +20,28 @@ namespace Mihap.CrawlerApi.Queue
 			for(int i =0; i < maxDepth; i++)
 			{
 				TasksQueues.Add(new Queue<TaskData>());
-				TasksQueueLocks.Add(new object);
+				TasksQueueLocks.Add(new object());
 			}
 			MaxDepth = maxDepth; 
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public static TaskData GetTask()
 		{
 			TaskData taskData;
 			bool TaskFound = false;
+			// попытка получить актуальную задачу, чем ниже уровнь вложенности ссылки - тем выше приоритет
 			for(int i = 0; i < MaxDepth; i++)
 			{
-
 				lock(TasksQueueLocks[i])
 				{
 					TaskFound = TasksQueues[i].TryDequeue(out taskData);
 				}
-				if (TaskFound) return taskData;
+				if (TaskFound) 
+					return taskData;
+				
 			}
 			return null;
 		}
