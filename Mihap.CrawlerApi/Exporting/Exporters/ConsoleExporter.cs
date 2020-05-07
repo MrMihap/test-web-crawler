@@ -10,7 +10,7 @@ namespace Mihap.CrawlerApi.Exporting.Exporters
 	{
 		private volatile bool DoWriting = true;
 
-		public ConsoleExporter(string Path)
+		public ConsoleExporter()
 		{
 			BackgroundWorkerTask = Task.Run(() => { BackgroundWriter(); });
 		}

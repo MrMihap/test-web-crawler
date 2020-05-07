@@ -29,5 +29,12 @@ namespace Mihap.CrawlerApi.Filtering
 			}
 			return false;
 		}
+
+		public ContentTypeFilter(string ContentType, FilterMode filterMode)
+		{
+			this.ContentType = ContentType;
+			this.filterMode = filterMode;
+		}
+
 	}
 }

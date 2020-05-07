@@ -9,8 +9,9 @@ namespace Mihap.CrawlerApi.Filtering
 	{
 		private List<BaseFilter> Filters = new List<BaseFilter>();
 
-		public FilterConvey AddFilter(BaseFilter baseFilter)
+		public FilterConvey AddFilter<T>(T Filter)  where T : BaseFilter
 		{
+			Filters.Add((BaseFilter)Filter);
 			return this;
 		}
 		public bool PassLink(Link link)

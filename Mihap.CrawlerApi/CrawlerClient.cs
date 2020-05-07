@@ -9,24 +9,27 @@ namespace Mihap.CrawlerApi
 	public class WebCrawlerClient
 	{
 		private static object BlockingObject = new object();
+
 		//private static WebCrawlerClient _Instance;
 		public static WebCrawlerClient Instance { get; } = new WebCrawlerClient();
 
 		public static event OnCrawlingFinishedDelegate OnCrawlingFinished;
 
-		private int MaxDepth = 0;
-		private int WorkersCount;
+		private CrawlerClientSettings settings;
 		private  TaskData RootLinkTask;
 		ProcessingManager processingManager;
 
 
-		public static async Task RunCrowler(string StartUrl, int MaxDeep = 1, int WorkersCount = 2)
+		public static async Task RunCrowler(Action<CrawlerClientSettings> options)
 		{
 			if (!Monitor.TryEnter(BlockingObject, 50)) throw new Exception("Worker Is Busy!");
 			try
 			{
-				Instance.WorkersCount = WorkersCount;
-				await Instance.Run( WorkersCount);
+				CrawlerClientSettings settings = new CrawlerClientSettings();
+
+				options.Invoke(settings);
+
+				//await Instance.Run( WorkersCount);
 			}
 			finally
 			{
