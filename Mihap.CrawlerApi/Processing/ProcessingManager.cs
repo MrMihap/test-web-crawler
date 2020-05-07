@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mihap.CrawlerApi.Processing
 {
+	public delegate void OnAllWorkersFinishedDelegate();
 	public class ProcessingManager
 	{
 		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
 		private bool DoProcessing = false;
 
+		public event OnAllWorkersFinishedDelegate OnAllWorkersFinished;
 
 
 		public static ProcessingManager InitNewManager(int WorkersN)
@@ -27,7 +30,26 @@ namespace Mihap.CrawlerApi.Processing
 		public void StartProcessing()
 		{
 			Processors.ForEach(x => x.Start());
+			Task.Run(() => ControlFunction());
 		}
+
+		public void ControlFunction()
+		{
+			while(DoProcessing)
+			{
+				//check all task of max depth is Finished
+				bool IsAllTaskDone = false;
+				if (IsAllTaskDone)
+				{
+					StopProcessing();
+					OnAllWorkersFinished?.Invoke();
+					break;
+				}
+
+				Task.Delay(150);
+			}
+		}
+
 		public void StopProcessing()
 		{
 			Processors.ForEach(x => x.DoProcessing = false);

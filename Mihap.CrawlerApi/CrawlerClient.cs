@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 
 namespace Mihap.CrawlerApi
 {
+	public delegate void OnCrawlingFinishedDelegate();
 	public class WebCrawlerClient
 	{
 		private static object BlockingObject = new object();
 		//private static WebCrawlerClient _Instance;
 		public static WebCrawlerClient Instance { get; } = new WebCrawlerClient();
-		
-		
+
+		public static event OnCrawlingFinishedDelegate OnCrawlingFinished;
+
 		private int MaxDepth = 0;
 		private int WorkersCount;
 		private  TaskData RootLinkTask;
@@ -35,10 +37,13 @@ namespace Mihap.CrawlerApi
 		{
 			await Task.CompletedTask.ConfigureAwait(false);
 			processingManager = ProcessingManager.InitNewManager(WorkersCount);
-
+			processingManager.OnAllWorkersFinished += ProcessingManager_OnAllWorkersFinished;
 			processingManager.StartProcessing();
 		}
 
-
+		private void ProcessingManager_OnAllWorkersFinished()
+		{
+			OnCrawlingFinished?.Invoke();
+		}
 	}
 }
