@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mihap.Crawler", "Mihap.Crawler\Mihap.Crawler.csproj", "{287C8252-2B0C-48E6-A432-1C5786180E31}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1826A902-5C9F-43B0-81B0-EB37B8E5654E} = {1826A902-5C9F-43B0-81B0-EB37B8E5654E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mihap.CrawlerApi", "Mihap.CrawlerApi\Mihap.CrawlerApi.csproj", "{1826A902-5C9F-43B0-81B0-EB37B8E5654E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{287C8252-2B0C-48E6-A432-1C5786180E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287C8252-2B0C-48E6-A432-1C5786180E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287C8252-2B0C-48E6-A432-1C5786180E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287C8252-2B0C-48E6-A432-1C5786180E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1826A902-5C9F-43B0-81B0-EB37B8E5654E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1826A902-5C9F-43B0-81B0-EB37B8E5654E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1826A902-5C9F-43B0-81B0-EB37B8E5654E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1826A902-5C9F-43B0-81B0-EB37B8E5654E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F082157D-CC3D-4562-9D0C-8915F868EE2D}
+	EndGlobalSection
+EndGlobal
