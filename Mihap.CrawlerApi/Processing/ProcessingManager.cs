@@ -9,6 +9,8 @@ namespace Mihap.CrawlerApi.Processing
 		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
 		private bool DoProcessing = false;
 
+
+
 		public static ProcessingManager InitNewManager(int WorkersN)
 		{
 			if (WorkersN < 1) WorkersN = 1;
@@ -24,10 +26,11 @@ namespace Mihap.CrawlerApi.Processing
 
 		public void StartProcessing()
 		{
-
+			Processors.ForEach(x => x.Start());
 		}
 		public void StopProcessing()
 		{
+			Processors.ForEach(x => x.DoProcessing = false);
 			throw new NotImplementedException();
 		}
 	}

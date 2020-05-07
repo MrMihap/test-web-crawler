@@ -16,7 +16,7 @@ namespace Mihap.CrawlerApi.Processing
 
 		public void Start()
 		{
-			Task.Run(() => { ProcessingFunction(); });
+			Task.Run(() => ProcessingFunction());
 		}
 
 		private void ProcessingFunction()
@@ -30,7 +30,7 @@ namespace Mihap.CrawlerApi.Processing
 					Task.Delay(150);
 					continue;
 				}
-
+				var candidates = ParseUrl(taskData);
 			}
 		}
 		private static async Task<List<Link>> ParseUrl(TaskData taskData)
