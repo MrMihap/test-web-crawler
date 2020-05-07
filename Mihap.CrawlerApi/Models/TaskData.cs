@@ -6,7 +6,8 @@ namespace Mihap.CrawlerApi.Models
 {
 	public class TaskData
 	{
-		public int DeepnessLevel { get; set; }
+		public int DepthLevel { get; set; }
+		public string Url { get; set; } = String.Empty;
 
 		public List<TaskData> ChildTasks { get; set; } = new List<TaskData>();
 	}
