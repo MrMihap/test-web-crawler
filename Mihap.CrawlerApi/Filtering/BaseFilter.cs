@@ -8,6 +8,7 @@ namespace Mihap.CrawlerApi.Filtering
 	public  class BaseFilter
 	{
 		public FilterMode filterMode { get; set; } = FilterMode.Pass;
+
 		public virtual bool Pass(Link link)
 		{
 			if (link == null)

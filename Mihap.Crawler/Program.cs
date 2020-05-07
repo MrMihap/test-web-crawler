@@ -2,7 +2,6 @@
 using Mihap.CrawlerApi;
 
 
-
 namespace Mihap.Crawler
 {
 	class Program
@@ -10,7 +9,6 @@ namespace Mihap.Crawler
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Hello World!");
-
 		}
 	}
 }
