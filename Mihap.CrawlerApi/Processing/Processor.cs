@@ -3,10 +3,12 @@ using Mihap.CrawlerApi.Queue;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mihap.CrawlerApi.Processing
@@ -31,18 +33,15 @@ namespace Mihap.CrawlerApi.Processing
 
 		private void ProcessingFunction()
 		{
-
 			while (DoProcessing)
 			{
 				TaskData taskData = QueueManager.GetTask();
 				if (taskData == null)
 				{
-					Task.Delay(150);
+					Thread.Sleep(250);
 					continue;
 				}
 				var candidates = ProcessUrl(taskData);
-
-
 
 				if (candidates != null && candidates.Count > 0)
 					OnChildLinkProcessed?.Invoke(candidates);
@@ -55,6 +54,7 @@ namespace Mihap.CrawlerApi.Processing
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);
+				request.Credentials = CredentialCache.DefaultCredentials;
 				WebResponse response = request.GetResponse();
 				taskData.Link.ContentType = response.ContentType;
 
@@ -73,9 +73,14 @@ namespace Mihap.CrawlerApi.Processing
 						responseString = reader.ReadToEnd();
 					}
 
+					// парсим
+					List<string> candidates = RegexMethod(responseString).ToList();
 				}
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				taskData.Link.ContentType = "failed";
+			}
 			finally
 			{
 				taskData.IsDone = true;
@@ -91,7 +96,7 @@ namespace Mihap.CrawlerApi.Processing
 		/// Method from https://github.com/forcewake/Benchmarks
 		/// </summary>
 
-		public IEnumerable<string> RegexMethod(string Html)
+		public  IEnumerable<string> RegexMethod(string Html)
 		{
 			List<string> hrefTags = new List<string>();
 
@@ -104,10 +109,8 @@ namespace Mihap.CrawlerApi.Processing
 				[^>]* >");
 			foreach (Match match in reHref.Matches(Html))
 			{
-				hrefTags.Add(match.Groups["url"].ToString());
+				yield return match.Groups["url"].Value;
 			}
-
-			return hrefTags;
 		}
 	}
 }

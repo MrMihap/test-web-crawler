@@ -27,21 +27,26 @@ namespace Mihap.CrawlerApi.Exporting.Exporters
 			File.WriteAllText(Path, "Hello, reader!");
 			#endregion
 
-			BackgroundWorkerTask = Task.Run(() => { BackgroundWriter(); });
+			//BackgroundWorkerTask = Task.Run(() => { BackgroundWriter(); });
 		}
 		
 
 		private void BackgroundWriter()
 		{
-			while(DoWriting)
+			string record;
+
+			while (DoWriting)
 			{
-				string record;
 				bool isEmpty = true;
 				lock (QueueLock)
 				{
 					isEmpty = !LinksQueue.TryDequeue(out record);
 				}
-				if (isEmpty) {  Task.Delay(250).Wait(); continue;}
+				if (isEmpty) 
+				{  
+					Task.Delay(250).Wait(); 
+					continue;
+				}
 				File.AppendAllText(this.Path, record);
 			}
 		}

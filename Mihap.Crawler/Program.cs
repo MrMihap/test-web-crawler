@@ -19,14 +19,14 @@ namespace Mihap.Crawler
 					.AddFilter(new ContentTypeFilter("js", FilterMode.NoPass));
 
 				crawler
-					.AddExporter(new FileExporter("output"))
+					.AddExporter(new FileExporter("output.txt"))
 					.AddExporter(new ConsoleExporter());
 
 				crawler.MaxDepth = 3;
 
 				crawler.WorkersN = 5;
 
-				crawler.RootUrl = @"https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/proposals/csharp-7.1/async-main";
+				crawler.RootUrl = @"https://docs.microsoft.com/ru-ru/dotnet/api/system.net.httpwebrequest.credentials?view=netframework-4.8";
 			});
 		}
 

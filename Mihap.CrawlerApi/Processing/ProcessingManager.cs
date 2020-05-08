@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mihap.CrawlerApi.Processing
@@ -59,8 +60,7 @@ namespace Mihap.CrawlerApi.Processing
 					OnAllWorkersFinished?.Invoke();
 					break;
 				}
-
-				Task.Delay(150);
+				Thread.Sleep(250);
 			}
 		}
 
