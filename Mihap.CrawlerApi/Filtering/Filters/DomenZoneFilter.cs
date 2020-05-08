@@ -9,6 +9,12 @@ namespace Mihap.CrawlerApi.Filtering
 	{
 		public string DomenZone { get; set; } = String.Empty;
 
+		public DomenZoneFilter(string ContentType, FilterMode filterMode)
+		{
+			this.DomenZone = ContentType;
+			this.filterMode = filterMode;
+		}
+
 		public override bool Pass(Link link)
 		{
 			if (link == null) return false;

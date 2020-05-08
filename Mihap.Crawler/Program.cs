@@ -15,7 +15,8 @@ namespace Mihap.Crawler
 			await WebCrawler.RunCrowler(crawler =>
 			{
 				crawler.filterConvey
-					.AddFilter(new ContentTypeFilter("html", FilterMode.Pass))
+					.AddFilter(new ContentTypeFilter("css", FilterMode.NoPass))
+					.AddFilter(new DomenZoneFilter("com", FilterMode.NoPass))
 					.AddFilter(new ContentTypeFilter("js", FilterMode.NoPass));
 
 				crawler

@@ -42,7 +42,7 @@ namespace Mihap.CrawlerApi.Queue
 				}
 				if (TaskFound)
 				{
-					Console.WriteLine($"Task getted!  {taskData.Link.Url}");
+					//Console.WriteLine($"Task getted!  {taskData.Link.Url}");
 					return taskData;
 				}
 			}
@@ -56,7 +56,7 @@ namespace Mihap.CrawlerApi.Queue
 
 			lock (TasksQueueLocks[data.DepthLevel])
 				TasksQueues[data.DepthLevel].Enqueue(data);
-			Console.WriteLine($"Inpt new Task!  {data.Link.Url}");
+			//Console.WriteLine($"Inpt new Task!  {data.Link.Url}");
 		}
 
 		public static int GetCount()
@@ -75,7 +75,7 @@ namespace Mihap.CrawlerApi.Queue
 			}
 
 			//dEBUG!!!
-			Console.WriteLine($" {n[0]} {n[1]}");
+			//Console.WriteLine($" {n[0]} {n[1]}");
 
 			return n.Sum();
 		}

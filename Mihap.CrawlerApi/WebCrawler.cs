@@ -36,7 +36,7 @@ namespace Mihap.CrawlerApi
 
 				QueueManager.Init(settings.MaxDepth);
 
-				QueueManager.AddTask(new TaskData() {DepthLevel = 0 , Link = new Models.Link() { Url = settings.RootUrl }});
+				QueueManager.AddTask(new TaskData() { DepthLevel = 0, Link = new Models.Link() { Url = settings.RootUrl } });
 
 				await Instance.Run();
 			}
@@ -55,7 +55,7 @@ namespace Mihap.CrawlerApi
 
 			processingManager.StartProcessing();
 
-			while(processingManager.DoProcessing)
+			while (processingManager.DoProcessing)
 			{
 				await Task.Delay(500);
 			}
@@ -63,12 +63,12 @@ namespace Mihap.CrawlerApi
 
 		private void ProcessingManager_OnLinkProcessed(TaskData link)
 		{
-			string record = $"{link.DepthLevel} ===> {link.Link.Url}: {link.Link.ContentType}, {link.Link.ResponseLength}";
-
-			foreach(var exporter in Instance.settings.exporters)
-			{
-				exporter.RecieveNewLinkRecord(record);
-			}
+			string record = $"{link.Link.Url}: {link.Link.ContentType}, {link.Link.ResponseLength}";
+			if (settings.filterConvey.PassLink(link.Link))
+				foreach (var exporter in Instance.settings.exporters)
+				{
+					exporter.RecieveNewLinkRecord(record);
+				}
 		}
 
 		private void ProcessingManager_OnAllWorkersFinished()
