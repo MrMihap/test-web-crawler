@@ -32,7 +32,7 @@ namespace Mihap.Crawler
 
 		private static void WebCrawlerClient_OnCrawlingFinished()
 		{
-			throw new NotImplementedException();
+			Console.WriteLine("Finished");
 		}
 	}
 }

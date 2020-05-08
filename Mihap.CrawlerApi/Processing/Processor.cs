@@ -16,7 +16,7 @@ namespace Mihap.CrawlerApi.Processing
 {
 	public delegate void OnChildLinkProcessedDelegate(List<Link> links);
 	public delegate void OnChildLinkFoundDelegate(TaskData link);
-	public delegate void OnLinkProcessedDelegate(Link link);
+	public delegate void OnLinkProcessedDelegate(TaskData link);
 	public class ProcessingWorker
 	{
 		public bool DoProcessing { get; set; } = true;
@@ -61,10 +61,7 @@ namespace Mihap.CrawlerApi.Processing
 				WebResponse response = request.GetResponse();
 				taskData.Link.ContentType = response.ContentType;
 
-
 				int MaxDepth = WebCrawler.Instance.settings.MaxDepth;
-
-
 
 				string responseString = "";
 
@@ -90,6 +87,8 @@ namespace Mihap.CrawlerApi.Processing
 
 						taskData.ChildTasks.Add(newTask);
 					}
+					//if (childLinks.Count > 0)
+					//	OnChildLinkProcessed?.Invoke(result);
 				}
 			}
 			catch (WebException ex)
@@ -104,10 +103,10 @@ namespace Mihap.CrawlerApi.Processing
 			{
 				taskData.IsDone = true;
 			}
-			if (result.Count > 0)
-				OnChildLinkProcessed?.Invoke(result);
 
-			OnLinkProcessed?.Invoke(taskData.Link);
+			OnLinkProcessed?.Invoke(taskData);
+
+
 			return result;
 		}
 		/// <summary>

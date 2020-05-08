@@ -18,8 +18,7 @@ namespace Mihap.CrawlerApi
 
 		public WebCrawlerSettings settings;
 
-		private TaskData RootTask;
-
+		public TaskData RootTask;
 
 		ProcessingManager processingManager;
 
@@ -46,10 +45,12 @@ namespace Mihap.CrawlerApi
 				Monitor.Exit(BlockingObject);
 			}
 		}
+
 		private async Task Run()
 		{
 			await Task.CompletedTask.ConfigureAwait(false);
 			processingManager = ProcessingManager.InitNewManager(settings.WorkersN);
+			processingManager.OnLinkProcessed += ProcessingManager_OnLinkProcessed;
 			processingManager.OnAllWorkersFinished += ProcessingManager_OnAllWorkersFinished;
 
 			processingManager.StartProcessing();
@@ -58,6 +59,17 @@ namespace Mihap.CrawlerApi
 			{
 				await Task.Delay(500);
 			}
+		}
+
+		private void ProcessingManager_OnLinkProcessed(TaskData link)
+		{
+			string record = $"{link.DepthLevel} ===> {link.Link.Url}: {link.Link.ContentType}, {link.Link.ResponseLength}";
+
+			foreach(var exporter in Instance.settings.exporters)
+			{
+				exporter.RecieveNewLinkRecord(record);
+			}
+			
 		}
 
 		private void ProcessingManager_OnAllWorkersFinished()

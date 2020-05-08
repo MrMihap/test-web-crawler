@@ -1,6 +1,7 @@
 ﻿using Mihap.CrawlerApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,9 +43,9 @@ namespace Mihap.CrawlerApi.Processing
 			//throw new NotImplementedException();
 		}
 
-		private void OnLinkProcessedHandler(Link link)
+		private void OnLinkProcessedHandler(TaskData link)
 		{
-
+			OnLinkProcessed?.Invoke(link);
 			//throw new NotImplementedException();
 		}
 
@@ -55,8 +56,12 @@ namespace Mihap.CrawlerApi.Processing
 				//check all task of max depth is Finished
 				bool IsAllTaskDone = false;
 
-				if(WebCrawler.Instance.settings.)
+				//if(TaskData.EnrollToList(WebCrawler.Instance.RootTask).Where(x=>x.IsDone == false).Count() == 0)
+				//{
+				//	IsAllTaskDone = true;
+				//}
 
+				//var test = TaskData.EnrollToList(WebCrawler.Instance.RootTask);
 
 				if (IsAllTaskDone)
 				{
@@ -64,7 +69,7 @@ namespace Mihap.CrawlerApi.Processing
 					OnAllWorkersFinished?.Invoke();
 					break;
 				}
-				Thread.Sleep(250);
+				Thread.Sleep(1250);
 			}
 		}
 

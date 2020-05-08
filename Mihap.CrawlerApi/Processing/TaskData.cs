@@ -19,10 +19,10 @@ namespace Mihap.CrawlerApi.Processing
 		public static List<TaskData> EnrollToList(TaskData root)
 		{
 			List<TaskData> result = new List<TaskData>();
-
-			foreach(var taskData in root.ChildTasks)
+			int n = root.ChildTasks.Count;
+			for (int i = 0; i < n;  i++)
 			{
-				result.AddRange(TaskData.EnrollToList(taskData));
+				result.AddRange(TaskData.EnrollToList(root.ChildTasks[i]));
 			}
 
 			return result;
