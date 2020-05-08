@@ -51,8 +51,6 @@ namespace Mihap.CrawlerApi.Queue
 
 		public static void AddTask(TaskData data)
 		{
-			
-
 			if (data.DepthLevel >= MaxDepth) 
 				return;
 

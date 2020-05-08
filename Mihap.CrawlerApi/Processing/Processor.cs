@@ -36,20 +36,27 @@ namespace Mihap.CrawlerApi.Processing
 		{
 			while (DoProcessing)
 			{
-				TaskData taskData = QueueManager.GetTask();
-				if (taskData == null)
+				try
 				{
-					Thread.Sleep(250);
-					continue;
-				}
-				var candidates = ProcessUrl(taskData);
+					TaskData taskData = QueueManager.GetTask();
+					if (taskData == null)
+					{
+						Thread.Sleep(250);
+						continue;
+					}
+					var candidates = ProcessUrl(taskData);
 
-				if (candidates != null && candidates.Count > 0)
-					OnChildLinkProcessed?.Invoke(candidates);
+					if (candidates != null && candidates.Count > 0)
+						OnChildLinkProcessed?.Invoke(candidates);
+				}
+				catch (Exception ex)
+				{
+				}
 			}
 		}
 		private List<Link> ProcessUrl(TaskData taskData)
 		{
+			
 			var result = new List<Link>();
 			var domen = (new Uri(taskData.Link.Url)).Host;
 			

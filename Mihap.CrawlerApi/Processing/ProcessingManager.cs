@@ -1,4 +1,5 @@
 ﻿using Mihap.CrawlerApi.Models;
+using Mihap.CrawlerApi.Queue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,9 @@ namespace Mihap.CrawlerApi.Processing
 				//}
 
 				//var test = TaskData.EnrollToList(WebCrawler.Instance.RootTask);
+
+				QueueManager.GetCount();
+
 
 				if (IsAllTaskDone)
 				{
