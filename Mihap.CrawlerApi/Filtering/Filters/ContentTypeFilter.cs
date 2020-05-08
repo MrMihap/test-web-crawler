@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mihap.CrawlerApi.Filtering
+namespace Mihap.CrawlerApi.Filtering.Filters
 {
 	public class ContentTypeFilter : BaseFilter
 	{
