@@ -6,7 +6,8 @@ namespace Mihap.CrawlerApi.Models
 {
 	public class Link
 	{
-		public string Url { get; set; }
+		public string Url { get; set; } = String.Empty;
+
 		public string ContentType { get; set; }
 	}
 }

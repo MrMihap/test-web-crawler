@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mihap.CrawlerApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,14 +7,13 @@ using System.Threading.Tasks;
 namespace Mihap.CrawlerApi.Processing
 {
 	public delegate void OnAllWorkersFinishedDelegate();
-	public delegate void OnLinkParsedFinishedDelegate();
 	public class ProcessingManager
 	{
 		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
 		private bool DoProcessing = false;
 
 		public event OnAllWorkersFinishedDelegate OnAllWorkersFinished;
-
+		public event OnLinkProcessedDelegate OnLinkProcessed;
 
 		public static ProcessingManager InitNewManager(int WorkersN)
 		{
@@ -24,14 +24,21 @@ namespace Mihap.CrawlerApi.Processing
 			{
 				manager.Processors.Add(new ProcessingWorker());
 			}
-
 			return manager;
 		}
 
 		public void StartProcessing()
 		{
+			Processors.ForEach(x => x.OnLinkProcessed += OnLinkProcessedHandler);
 			Processors.ForEach(x => x.Start());
+
 			Task.Run(() => ControlFunction());
+		}
+
+		private void OnLinkProcessedHandler(Link link)
+		{
+
+			//throw new NotImplementedException();
 		}
 
 		public void ControlFunction()

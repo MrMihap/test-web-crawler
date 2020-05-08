@@ -11,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace Mihap.CrawlerApi.Processing
 {
-	public delegate void OnLinkProcessedDelegate(List<Link> links);
+	public delegate void OnChildLinkProcessedDelegate(List<Link> links);
+	public delegate void OnLinkProcessedDelegate(Link link);
 	public class ProcessingWorker
 	{
 		public bool DoProcessing { get; set; } = true;
 
 		private HttpClient httpClient = new HttpClient();
 
+		public event OnChildLinkProcessedDelegate OnChildLinkProcessed;
 		public event OnLinkProcessedDelegate OnLinkProcessed;
 
 		public void Start()
@@ -41,7 +43,7 @@ namespace Mihap.CrawlerApi.Processing
 
 
 				if (candidates != null && candidates.Count > 0)
-					OnLinkProcessed?.Invoke(candidates);
+					OnChildLinkProcessed?.Invoke(candidates);
 			}
 		}
 		private List<Link> ParseUrl(TaskData taskData)
@@ -51,7 +53,7 @@ namespace Mihap.CrawlerApi.Processing
 
 			try
 			{
-				WebRequest request = WebRequest.Create(taskData.Url);
+				WebRequest request = WebRequest.Create(taskData.Link.Url);
 				WebResponse response = request.GetResponse();
 				string responseString = "";
 				using (var reader = new StreamReader(response.GetResponseStream()))
@@ -67,7 +69,7 @@ namespace Mihap.CrawlerApi.Processing
 			{
 				taskData.IsDone = true;
 			}
-			OnLinkProcessed?.Invoke(result);
+			OnChildLinkProcessed?.Invoke(result);
 			return result;
 		}
 		/// <summary>

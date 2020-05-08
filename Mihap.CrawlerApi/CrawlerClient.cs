@@ -18,7 +18,7 @@ namespace Mihap.CrawlerApi
 
 		private CrawlerClientSettings settings;
 
-		private  TaskData RootLinkTask;
+		private TaskData RootLinkTask;
 
 		ProcessingManager processingManager;
 
