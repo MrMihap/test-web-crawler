@@ -24,21 +24,23 @@ namespace Mihap.CrawlerApi.Processing
 
 		public void Start()
 		{
+
+
 			Task.Run(() => ProcessingFunction());
 		}
 
 		private void ProcessingFunction()
 		{
 
-			while(DoProcessing)
+			while (DoProcessing)
 			{
-				TaskData taskData = QueueManager.GetTask(); 
-				if(taskData == null)
+				TaskData taskData = QueueManager.GetTask();
+				if (taskData == null)
 				{
 					Task.Delay(150);
 					continue;
 				}
-				var candidates = ParseUrl(taskData);
+				var candidates = ProcessUrl(taskData);
 
 
 
@@ -46,30 +48,42 @@ namespace Mihap.CrawlerApi.Processing
 					OnChildLinkProcessed?.Invoke(candidates);
 			}
 		}
-		private List<Link> ParseUrl(TaskData taskData)
+		private List<Link> ProcessUrl(TaskData taskData)
 		{
-
 			var result = new List<Link>();
 
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);
 				WebResponse response = request.GetResponse();
-				string responseString = "";
-				using (var reader = new StreamReader(response.GetResponseStream()))
+				taskData.Link.ContentType = response.ContentType;
+
+
+				int MaxDepth = WebCrawlerClient.Instance.settings.MaxDepth;
+
+				// если глубина не превысила целевую
+				// ищем ссылки глубже
+				if (taskData.DepthLevel <= MaxDepth)
 				{
-					responseString = reader.ReadToEnd();
+					string responseString = "";
+
+					// вычитыаем html
+					using (var reader = new StreamReader(response.GetResponseStream()))
+					{
+						responseString = reader.ReadToEnd();
+					}
+
 				}
-				string contentType = response.ContentType;
 			}
-			catch
-			{
-			}
-			finally 
+			catch { }
+			finally
 			{
 				taskData.IsDone = true;
 			}
-			OnChildLinkProcessed?.Invoke(result);
+			if(result.Count > 0)
+				OnChildLinkProcessed?.Invoke(result);
+
+			OnLinkProcessed?.Invoke(taskData.Link);
 			return result;
 		}
 		/// <summary>

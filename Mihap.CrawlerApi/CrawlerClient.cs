@@ -16,9 +16,10 @@ namespace Mihap.CrawlerApi
 
 		public static event OnCrawlingFinishedDelegate OnCrawlingFinished;
 
-		private CrawlerClientSettings settings;
+		public CrawlerClientSettings settings;
 
-		private TaskData RootLinkTask;
+		private TaskData RootTask;
+
 
 		ProcessingManager processingManager;
 
@@ -35,7 +36,9 @@ namespace Mihap.CrawlerApi
 				Instance.settings = settings;
 
 				QueueManager.Init(settings.MaxDepth);
-				
+
+				QueueManager.AddTask(new TaskData() { Link = new Models.Link() { Url = settings.RootUrl }}, 0);
+
 				await Instance.Run();
 			}
 			finally
@@ -48,7 +51,13 @@ namespace Mihap.CrawlerApi
 			await Task.CompletedTask.ConfigureAwait(false);
 			processingManager = ProcessingManager.InitNewManager(settings.WorkersN);
 			processingManager.OnAllWorkersFinished += ProcessingManager_OnAllWorkersFinished;
+
 			processingManager.StartProcessing();
+
+			while(processingManager.DoProcessing)
+			{
+				await Task.Delay(500);
+			}
 		}
 
 		private void ProcessingManager_OnAllWorkersFinished()

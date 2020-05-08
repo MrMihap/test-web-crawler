@@ -10,7 +10,7 @@ namespace Mihap.CrawlerApi.Processing
 	public class ProcessingManager
 	{
 		private List<ProcessingWorker> Processors = new List<ProcessingWorker>();
-		private bool DoProcessing = false;
+		public bool DoProcessing = true;
 
 		public event OnAllWorkersFinishedDelegate OnAllWorkersFinished;
 		public event OnLinkProcessedDelegate OnLinkProcessed;
@@ -30,9 +30,15 @@ namespace Mihap.CrawlerApi.Processing
 		public void StartProcessing()
 		{
 			Processors.ForEach(x => x.OnLinkProcessed += OnLinkProcessedHandler);
+			Processors.ForEach(x => x.OnChildLinkProcessed += OnChildLinkProcessed);
 			Processors.ForEach(x => x.Start());
 
 			Task.Run(() => ControlFunction());
+		}
+
+		private void OnChildLinkProcessed(List<Link> links)
+		{
+			//throw new NotImplementedException();
 		}
 
 		private void OnLinkProcessedHandler(Link link)
@@ -61,6 +67,7 @@ namespace Mihap.CrawlerApi.Processing
 		public void StopProcessing()
 		{
 			Processors.ForEach(x => x.DoProcessing = false);
+			Processors.Clear();
 		}
 	}
 }
