@@ -18,7 +18,8 @@ namespace Mihap.CrawlerApi.Filtering
 		{
 			foreach(var filter in Filters)
 			{
-				if (!filter.Pass(link)) return false;
+				if (!filter.Pass(link)) 
+					return false;
 			}
 			return true;
 		}

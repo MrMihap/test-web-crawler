@@ -58,10 +58,10 @@ namespace Mihap.CrawlerApi.Processing
 		{
 			
 			var result = new List<Link>();
-			var domen = (new Uri(taskData.Link.Url)).Host;
+			var domain = (new Uri(taskData.Link.Url)).Host;
 			
 			/// DEBUG!
-			if(domen.Contains("vk"))
+			if(domain.Contains("vk"))
 			{
 
 			}
@@ -91,7 +91,7 @@ namespace Mihap.CrawlerApi.Processing
 				{
 					// парсим
 					var raw = HtmlAgilityPack(responseString);
-					var childLinks = MakeAbsolutUrls(raw, domen);
+					var childLinks = MakeAbsolutUrls(raw, domain);
 						//.ToList();
 
 					foreach (var linkUrl in childLinks)

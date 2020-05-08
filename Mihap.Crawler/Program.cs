@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Mihap.CrawlerApi;
 using Mihap.CrawlerApi.Exporting.Exporters;
 using Mihap.CrawlerApi.Filtering;
+using Mihap.CrawlerApi.Filtering.Filters;
 
 namespace Mihap.Crawler
 {
@@ -16,8 +17,8 @@ namespace Mihap.Crawler
 			{
 				crawler.filterConvey
 					.AddFilter(new ContentTypeFilter("css", FilterMode.NoPass))
-					.AddFilter(new DomenZoneFilter("com", FilterMode.NoPass))
-					.AddFilter(new ContentTypeFilter("js", FilterMode.NoPass));
+					.AddFilter(new DomainZoneFilter("com", FilterMode.NoPass))
+					.AddFilter(new DomainFilter("js", FilterMode.NoPass));
 
 				crawler
 					.AddExporter(new FileExporter("output.txt"))
