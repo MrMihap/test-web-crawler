@@ -25,7 +25,7 @@ namespace Mihap.Crawler
 				crawler.MaxDepth = 3;
 
 				crawler.WorkersN = 5;
-				crawler.RootUrl = @"https://metanit.com/sharp/tutorial/";
+				crawler.RootUrl = "https://metanit.com/sharp/tutorial/";
 				//crawler.RootUrl = @"https://metanit.com/sharp/aspnet5/32.1.php";
 			});
 		}

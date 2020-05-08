@@ -52,7 +52,7 @@ namespace Mihap.CrawlerApi.Processing
 		{
 			var result = new List<Link>();
 			var domen = (new Uri(taskData.Link.Url)).Host;
-		
+
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);
@@ -64,21 +64,30 @@ namespace Mihap.CrawlerApi.Processing
 
 				int MaxDepth = WebCrawlerClient.Instance.settings.MaxDepth;
 
+
+
+				string responseString = "";
+
+				// вычитыаем html
+				using (var reader = new StreamReader(response.GetResponseStream()))
+				{
+					responseString = reader.ReadToEnd();
+				}
+
+				taskData.Link.ResponseLength = responseString.Length;
+
 				// если глубина не превысила целевую
 				// ищем ссылки глубже
 				if (taskData.DepthLevel <= MaxDepth)
 				{
-					string responseString = "";
-
-					// вычитыаем html
-					using (var reader = new StreamReader(response.GetResponseStream()))
-					{
-						responseString = reader.ReadToEnd();
-					}
-
 					// парсим
-					var childLinks = HtmlAgilityPack(responseString).ToList();
+					var childLinks = MakeAbsolutUrls(HtmlAgilityPack(responseString), domen).ToList();
 
+					foreach (var linkUrl in childLinks)
+					{
+						TaskData newTask = new TaskData() { DepthLevel = taskData.DepthLevel + 1, IsDone = false, Link = new Link() { Url = linkUrl } };
+						QueueManager.AddTask(newTask);
+					}
 				}
 			}
 			catch (WebException ex)
@@ -139,11 +148,33 @@ namespace Mihap.CrawlerApi.Processing
 
 		}
 
-		public IEnumerable<string> MakeAbsolutUrls(IEnumerable<string> uris, string BaseUrl)
+		public IEnumerable<string> MakeAbsolutUrls(IEnumerable<string> uris, string rootUrl)
 		{
-			foreach(var uri in uris)
+
+			if (!Uri.TryCreate(rootUrl, UriKind.RelativeOrAbsolute, out Uri rootUri))
+				yield break;
+			foreach (var url in uris)
 			{
-				yield return "";
+				if (!Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri uri))
+					continue;
+				if (uri.IsAbsoluteUri)
+					yield return url;
+				else
+				{
+					string dude_url = url;
+
+					/// КОСТЫЛЬ!!!!!!!!!
+					if (url.StartsWith("//"))
+					{
+						dude_url = url.Remove(0, 2);
+						if (Uri.TryCreate(dude_url, UriKind.RelativeOrAbsolute, out uri))
+							yield return dude_url;
+						continue;
+					}
+
+					if (Uri.TryCreate(rootUri, url, out uri))
+						yield return uri.AbsoluteUri;
+				}
 			}
 		}
 	}

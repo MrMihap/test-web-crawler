@@ -37,7 +37,7 @@ namespace Mihap.CrawlerApi
 
 				QueueManager.Init(settings.MaxDepth);
 
-				QueueManager.AddTask(new TaskData() { Link = new Models.Link() { Url = settings.RootUrl }}, 0);
+				QueueManager.AddTask(new TaskData() {DepthLevel = 0 , Link = new Models.Link() { Url = settings.RootUrl }});
 
 				await Instance.Run();
 			}

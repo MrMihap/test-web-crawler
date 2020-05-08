@@ -45,12 +45,13 @@ namespace Mihap.CrawlerApi.Queue
 			}
 			return null;
 		}
-		public static void AddTask(TaskData data, int depth)
+		public static void AddTask(TaskData data)
 		{
-			if (depth >= MaxDepth) throw new IndexOutOfRangeException("depth is overheaded");
+			if (data.DepthLevel >= MaxDepth) return;
+				//throw new IndexOutOfRangeException("depth is overheaded");
 
-			lock (TasksQueueLocks[depth])
-				TasksQueues[depth].Enqueue(data);
+			lock (TasksQueueLocks[data.DepthLevel])
+				TasksQueues[data.DepthLevel].Enqueue(data);
 		}
 	}
 }
