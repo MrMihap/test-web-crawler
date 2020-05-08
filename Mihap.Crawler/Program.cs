@@ -17,8 +17,9 @@ namespace Mihap.Crawler
 			{
 				crawler.filterConvey
 					.AddFilter(new ContentTypeFilter("css", FilterMode.NoPass))
-					.AddFilter(new DomainZoneFilter("com", FilterMode.NoPass))
-					.AddFilter(new DomainFilter("js", FilterMode.NoPass));
+					.AddFilter(new DomainZoneFilter("net", FilterMode.NoPass))
+					.AddFilter(new DomainFilter("twitter", FilterMode.NoPass))
+					.AddFilter(new DomainFilter("youtube", FilterMode.NoPass));
 
 				crawler
 					.AddExporter(new FileExporter("output.txt"))

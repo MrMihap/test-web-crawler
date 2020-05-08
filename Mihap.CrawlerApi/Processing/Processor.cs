@@ -108,12 +108,12 @@ namespace Mihap.CrawlerApi.Processing
 			catch (WebException ex)
 			{
 				taskData.Link.ContentType = "failed";
-				Console.WriteLine($"FAIL: {taskData.Link.Url}");
+				//Console.WriteLine($"FAIL: {taskData.Link.Url}");
 			}
 			catch (Exception ex)
 			{
 				taskData.Link.ContentType = "failed";
-				Console.WriteLine($"FAIL: {taskData.Link.Url}");
+				//Console.WriteLine($"FAIL: {taskData.Link.Url}");
 			}
 			finally
 			{

@@ -21,8 +21,6 @@ namespace Mihap.CrawlerApi.Filtering.Filters
 			if (link == null) return false;
 			if (String.IsNullOrEmpty(DomainZone)) return false;
 
-
-
 			switch(filterMode)
 			{
 				case FilterMode.Pass:
