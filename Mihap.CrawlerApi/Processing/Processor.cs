@@ -61,10 +61,10 @@ namespace Mihap.CrawlerApi.Processing
 			var domain = (new Uri(taskData.Link.Url)).Host;
 			
 			/// DEBUG!
-			if(domain.Contains("vk"))
-			{
+			//if(domain.Contains("vk"))
+			//{
 
-			}
+			//}
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);

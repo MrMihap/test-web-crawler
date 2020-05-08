@@ -27,7 +27,7 @@ namespace Mihap.CrawlerApi.Exporting.Exporters
 			File.WriteAllText(Path, "Hello, reader!");
 			#endregion
 
-			//BackgroundWorkerTask = Task.Run(() => { BackgroundWriter(); });
+			BackgroundWorkerTask = Task.Run(() => { BackgroundWriter(); });
 		}
 		
 
@@ -47,7 +47,7 @@ namespace Mihap.CrawlerApi.Exporting.Exporters
 					Task.Delay(250).Wait(); 
 					continue;
 				}
-				File.AppendAllText(this.Path, record);
+				File.AppendAllLines(this.Path, new string[] { record });
 			}
 		}
 		~FileExporter()
