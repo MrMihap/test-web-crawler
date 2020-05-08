@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mihap.CrawlerApi
 {
-	public class CrawlerClientSettings
+	public class WebCrawlerSettings
 	{
 		public FilterConvey filterConvey { get; set; } = new FilterConvey();
 
@@ -18,7 +18,7 @@ namespace Mihap.CrawlerApi
 
 		public int MaxDepth { get; set; } = 1;
 
-		public CrawlerClientSettings AddExporter(BaseExporter exporter)
+		public WebCrawlerSettings AddExporter(BaseExporter exporter)
 		{
 			exporters.Add(exporter);
 			return this;

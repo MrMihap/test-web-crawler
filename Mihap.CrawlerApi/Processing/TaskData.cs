@@ -16,9 +16,16 @@ namespace Mihap.CrawlerApi.Processing
 
 		public List<TaskData> ChildTasks { get; set; } = new List<TaskData>();
 
-		//public static List<TaskData> EnrollToList(TaskData root)
-		//{
+		public static List<TaskData> EnrollToList(TaskData root)
+		{
+			List<TaskData> result = new List<TaskData>();
 
-		//}
+			foreach(var taskData in root.ChildTasks)
+			{
+				result.AddRange(TaskData.EnrollToList(taskData));
+			}
+
+			return result;
+		}
 	}
 }

@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace Mihap.CrawlerApi
 {
 	public delegate void OnCrawlingFinishedDelegate();
-	public class WebCrawlerClient
+	public class WebCrawler
 	{
 		private static object BlockingObject = new object();
 
 		//private static WebCrawlerClient _Instance;
-		public static WebCrawlerClient Instance { get; } = new WebCrawlerClient();
+		public static WebCrawler Instance { get; } = new WebCrawler();
 
 		public static event OnCrawlingFinishedDelegate OnCrawlingFinished;
 
-		public CrawlerClientSettings settings;
+		public WebCrawlerSettings settings;
 
 		private TaskData RootTask;
 
@@ -24,12 +24,12 @@ namespace Mihap.CrawlerApi
 		ProcessingManager processingManager;
 
 
-		public static async Task RunCrowler(Action<CrawlerClientSettings> options)
+		public static async Task RunCrowler(Action<WebCrawlerSettings> options)
 		{
 			if (!Monitor.TryEnter(BlockingObject, 50)) throw new Exception("Worker Is Busy!");
 			try
 			{
-				CrawlerClientSettings settings = new CrawlerClientSettings();
+				WebCrawlerSettings settings = new WebCrawlerSettings();
 
 				options.Invoke(settings);
 

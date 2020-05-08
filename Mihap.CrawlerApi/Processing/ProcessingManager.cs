@@ -54,6 +54,10 @@ namespace Mihap.CrawlerApi.Processing
 			{
 				//check all task of max depth is Finished
 				bool IsAllTaskDone = false;
+
+				if(WebCrawler.Instance.settings.)
+
+
 				if (IsAllTaskDone)
 				{
 					StopProcessing();

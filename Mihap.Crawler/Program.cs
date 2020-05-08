@@ -10,9 +10,9 @@ namespace Mihap.Crawler
 	{
 		static async Task Main(string[] args)
 		{
-			WebCrawlerClient.OnCrawlingFinished += WebCrawlerClient_OnCrawlingFinished;
+			WebCrawler.OnCrawlingFinished += WebCrawlerClient_OnCrawlingFinished;
 
-			await WebCrawlerClient.RunCrowler(crawler =>
+			await WebCrawler.RunCrowler(crawler =>
 			{
 				crawler.filterConvey
 					.AddFilter(new ContentTypeFilter("html", FilterMode.Pass))

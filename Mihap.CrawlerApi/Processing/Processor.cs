@@ -62,7 +62,7 @@ namespace Mihap.CrawlerApi.Processing
 				taskData.Link.ContentType = response.ContentType;
 
 
-				int MaxDepth = WebCrawlerClient.Instance.settings.MaxDepth;
+				int MaxDepth = WebCrawler.Instance.settings.MaxDepth;
 
 
 
@@ -87,6 +87,8 @@ namespace Mihap.CrawlerApi.Processing
 					{
 						TaskData newTask = new TaskData() { DepthLevel = taskData.DepthLevel + 1, IsDone = false, Link = new Link() { Url = linkUrl } };
 						QueueManager.AddTask(newTask);
+
+						taskData.ChildTasks.Add(newTask);
 					}
 				}
 			}
