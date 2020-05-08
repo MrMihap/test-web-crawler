@@ -69,7 +69,6 @@ namespace Mihap.CrawlerApi
 			{
 				exporter.RecieveNewLinkRecord(record);
 			}
-			
 		}
 
 		private void ProcessingManager_OnAllWorkersFinished()

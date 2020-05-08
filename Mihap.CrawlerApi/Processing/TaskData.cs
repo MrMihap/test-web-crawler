@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mihap.CrawlerApi.Processing
 {
-	[DebuggerDisplay("{DepthLevel} : {Url} - {IsDone}")]
+	[DebuggerDisplay("{DepthLevel} : {Link.Url} - {IsDone}")]
 	public class TaskData
 	{
 		public int DepthLevel { get; set; }

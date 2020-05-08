@@ -52,7 +52,12 @@ namespace Mihap.CrawlerApi.Processing
 		{
 			var result = new List<Link>();
 			var domen = (new Uri(taskData.Link.Url)).Host;
+			
+			/// DEBUG!
+			if(domen.Contains("vk"))
+			{
 
+			}
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);
@@ -78,7 +83,9 @@ namespace Mihap.CrawlerApi.Processing
 				if (taskData.DepthLevel <= MaxDepth)
 				{
 					// парсим
-					var childLinks = MakeAbsolutUrls(HtmlAgilityPack(responseString), domen).ToList();
+					var raw = HtmlAgilityPack(responseString);
+					var childLinks = MakeAbsolutUrls(raw, domen);
+						//.ToList();
 
 					foreach (var linkUrl in childLinks)
 					{
@@ -94,10 +101,12 @@ namespace Mihap.CrawlerApi.Processing
 			catch (WebException ex)
 			{
 				taskData.Link.ContentType = "failed";
+				Console.WriteLine($"FAIL: {taskData.Link.Url}");
 			}
 			catch (Exception ex)
 			{
 				taskData.Link.ContentType = "failed";
+				Console.WriteLine($"FAIL: {taskData.Link.Url}");
 			}
 			finally
 			{

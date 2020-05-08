@@ -2,6 +2,7 @@
 using Mihap.CrawlerApi.Processing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mihap.CrawlerApi.Queue
@@ -39,19 +40,46 @@ namespace Mihap.CrawlerApi.Queue
 				{
 					TaskFound = TasksQueues[i].TryDequeue(out taskData);
 				}
-				if (TaskFound) 
+				if (TaskFound)
+				{
+					Console.WriteLine($"Task getted!  {taskData.Link.Url}");
 					return taskData;
-				
+				}
 			}
 			return null;
 		}
+
 		public static void AddTask(TaskData data)
 		{
-			if (data.DepthLevel >= MaxDepth) return;
-				//throw new IndexOutOfRangeException("depth is overheaded");
+			
+
+			if (data.DepthLevel >= MaxDepth) 
+				return;
 
 			lock (TasksQueueLocks[data.DepthLevel])
 				TasksQueues[data.DepthLevel].Enqueue(data);
+			Console.WriteLine($"Inpt new Task!  {data.Link.Url}");
+		}
+
+		public static int GetCount()
+		{
+			// попытка получить актуальную задачу, чем ниже уровнь вложенности ссылки - тем выше приоритет
+
+			int[] n = new int[MaxDepth];
+
+			for (int i = 0; i < MaxDepth; i++)
+			{
+				lock (TasksQueueLocks[i])
+				{
+					n[i] = TasksQueues[i].Count;
+
+				}
+			}
+
+			//dEBUG!!!
+			Console.WriteLine($" {n[0]} {n[1]}");
+
+			return n.Sum();
 		}
 	}
 }
