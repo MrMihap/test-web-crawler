@@ -1,4 +1,5 @@
-﻿using Mihap.CrawlerApi.Models;
+﻿using HtmlAgilityPack;
+using Mihap.CrawlerApi.Models;
 using Mihap.CrawlerApi.Queue;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Mihap.CrawlerApi.Processing
 {
 	public delegate void OnChildLinkProcessedDelegate(List<Link> links);
+	public delegate void OnChildLinkFoundDelegate(TaskData link);
 	public delegate void OnLinkProcessedDelegate(Link link);
 	public class ProcessingWorker
 	{
@@ -23,11 +25,10 @@ namespace Mihap.CrawlerApi.Processing
 
 		public event OnChildLinkProcessedDelegate OnChildLinkProcessed;
 		public event OnLinkProcessedDelegate OnLinkProcessed;
+		public event OnChildLinkFoundDelegate OnChildLinkFound;
 
 		public void Start()
 		{
-
-
 			Task.Run(() => ProcessingFunction());
 		}
 
@@ -50,11 +51,13 @@ namespace Mihap.CrawlerApi.Processing
 		private List<Link> ProcessUrl(TaskData taskData)
 		{
 			var result = new List<Link>();
-
+			var domen = (new Uri(taskData.Link.Url)).Host;
+		
 			try
 			{
 				WebRequest request = WebRequest.Create(taskData.Link.Url);
 				request.Credentials = CredentialCache.DefaultCredentials;
+				request.Headers.Add("User-Agent", "PostmanRuntime/7.24.0");
 				WebResponse response = request.GetResponse();
 				taskData.Link.ContentType = response.ContentType;
 
@@ -74,8 +77,13 @@ namespace Mihap.CrawlerApi.Processing
 					}
 
 					// парсим
-					List<string> candidates = RegexMethod(responseString).ToList();
+					var childLinks = HtmlAgilityPack(responseString).ToList();
+
 				}
+			}
+			catch (WebException ex)
+			{
+				taskData.Link.ContentType = "failed";
 			}
 			catch (Exception ex)
 			{
@@ -85,7 +93,7 @@ namespace Mihap.CrawlerApi.Processing
 			{
 				taskData.IsDone = true;
 			}
-			if(result.Count > 0)
+			if (result.Count > 0)
 				OnChildLinkProcessed?.Invoke(result);
 
 			OnLinkProcessed?.Invoke(taskData.Link);
@@ -96,9 +104,8 @@ namespace Mihap.CrawlerApi.Processing
 		/// Method from https://github.com/forcewake/Benchmarks
 		/// </summary>
 
-		public  IEnumerable<string> RegexMethod(string Html)
+		public IEnumerable<string> RegexMethod(string Html)
 		{
-			List<string> hrefTags = new List<string>();
 
 			Regex reHref = new Regex(@"(?inx)
 				<a \s [^>]*
@@ -109,7 +116,34 @@ namespace Mihap.CrawlerApi.Processing
 				[^>]* >");
 			foreach (Match match in reHref.Matches(Html))
 			{
-				yield return match.Groups["url"].Value;
+				string link = match.Groups["url"].Value;
+				if (Uri.TryCreate(link, UriKind.RelativeOrAbsolute, out Uri uriResult))
+					yield return link;
+			}
+		}
+		/// <summary>
+		/// Extract all anchor tags using HtmlAgilityPack
+		/// Method from https://github.com/forcewake/Benchmarks
+		/// </summary>
+		public IEnumerable<string> HtmlAgilityPack(string Html)
+		{
+			HtmlDocument htmlSnippet = new HtmlDocument();
+			htmlSnippet.LoadHtml(Html);
+			List<string> hrefTags = new List<string>();
+
+			foreach (HtmlNode link in htmlSnippet.DocumentNode.SelectNodes("//a[@href]"))
+			{
+				HtmlAttribute att = link.Attributes["href"];
+				yield return att.Value;
+			}
+
+		}
+
+		public IEnumerable<string> MakeAbsolutUrls(IEnumerable<string> uris, string BaseUrl)
+		{
+			foreach(var uri in uris)
+			{
+				yield return "";
 			}
 		}
 	}

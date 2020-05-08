@@ -25,8 +25,8 @@ namespace Mihap.Crawler
 				crawler.MaxDepth = 3;
 
 				crawler.WorkersN = 5;
-
-				crawler.RootUrl = @"https://docs.microsoft.com/ru-ru/dotnet/api/system.net.httpwebrequest.credentials?view=netframework-4.8";
+				crawler.RootUrl = @"https://metanit.com/sharp/tutorial/";
+				//crawler.RootUrl = @"https://metanit.com/sharp/aspnet5/32.1.php";
 			});
 		}
 
